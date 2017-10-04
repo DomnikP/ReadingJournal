@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class BookListFragment extends Fragment{
     private class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
         private TextView mAuthorTextView;
-        private TextView mGenreTextView;
+        private ImageView mReadImageView;
 
         private Book mBook;
 
@@ -55,7 +56,7 @@ public class BookListFragment extends Fragment{
             super(inflater.inflate(R.layout.list_item_book, parent,false));
             mTitleTextView= (TextView) itemView.findViewById(R.id.book_title);
             mAuthorTextView = (TextView) itemView.findViewById(R.id.book_author);
-            mGenreTextView = (TextView) itemView.findViewById(R.id.book_genre);
+            mReadImageView = (ImageView) itemView.findViewById(R.id.book_read);
             itemView.setOnClickListener(this);
         }
 
@@ -63,7 +64,7 @@ public class BookListFragment extends Fragment{
             mBook = book;
             mTitleTextView.setText(mBook.getTitle());
             mAuthorTextView.setText(mBook.getAuthor());
-            mGenreTextView.setText(mBook.getGenre());
+            mReadImageView.setVisibility(book.isRead() ? View.VISIBLE : View.GONE);
         }
 
         @Override
