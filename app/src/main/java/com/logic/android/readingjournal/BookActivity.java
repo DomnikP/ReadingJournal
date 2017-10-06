@@ -1,10 +1,28 @@
 package com.logic.android.readingjournal;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
+
+import java.util.UUID;
+
 public class BookActivity extends SingleFragmentActivity {
+
+    private static final String EXTRA_BOOK_ID = "com.logic.android.readingjpournal.book.id";
+
+    public static Intent newIntent(Context packageContext, UUID bookId) {
+        Intent intent = new Intent(packageContext, BookActivity.class);
+        intent.putExtra(EXTRA_BOOK_ID, bookId);
+        return intent;
+    }
+
+
+
 
 
     @Override
-    protected BookListFragment createFragment() {
-        return new BookListFragment();
+    protected Fragment createFragment() {
+        UUID bookId = (UUID) getIntent().getSerializableExtra(EXTRA_BOOK_ID);
+        return BookFragment.newInstance(bookId);
     }
 }

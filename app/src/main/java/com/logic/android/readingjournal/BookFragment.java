@@ -14,11 +14,15 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by dominik on 23.09.17.
  */
 
 public class BookFragment extends Fragment {
+
+    private static final String ARG_BOOK_ID = "book_id";
 
     private Book mBook;
     private EditText mTitleField;
@@ -27,10 +31,21 @@ public class BookFragment extends Fragment {
     private Button mDateButton;
     private CheckBox mReadCheckBox;
 
+    public static BookFragment newInstance(UUID bookId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_BOOK_ID,bookId);
+
+        BookFragment fragment = new BookFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBook = new Book();
+
+        UUID bookId = (UUID) getArguments().getSerializable(ARG_BOOK_ID);
+        mBook = BookList.get(getActivity()).getBook(bookId);
     }
 
     @Nullable
@@ -39,6 +54,7 @@ public class BookFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_book, container,false);
 
         mTitleField = (EditText) v.findViewById(R.id.book_title);
+        mTitleField.setText(mBook.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -103,6 +119,7 @@ public class BookFragment extends Fragment {
         mDateButton.setEnabled(false);
 
         mReadCheckBox = (CheckBox) v.findViewById(R.id.book_read);
+        mReadCheckBox.setChecked(mBook.isRead());
         mReadCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

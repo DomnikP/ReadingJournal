@@ -1,5 +1,6 @@
 package com.logic.android.readingjournal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -69,7 +70,8 @@ public class BookListFragment extends Fragment{
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), mBook.getTitle() + "Clicked!" , Toast.LENGTH_SHORT).show();
+           Intent intent = BookActivity.newIntent(getActivity(), mBook.getId());
+            startActivity(intent);
         }
     }
 
