@@ -21,7 +21,7 @@ import java.util.List;
  * Created by dominik on 02.10.17.
  */
 
-public class BookListFragment extends Fragment{
+public class BookListFragment extends Fragment {
 
     private RecyclerView mBookRecyclerView;
     private BookAdapter mAdapter;
@@ -30,8 +30,14 @@ public class BookListFragment extends Fragment{
         BookList bookList = BookList.get(getActivity());
         List<Book> books = bookList.getBooks();
 
-        mAdapter = new BookAdapter(books);
-        mBookRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new BookAdapter(books);
+            mBookRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+
+
     }
 
     @Nullable
@@ -39,11 +45,16 @@ public class BookListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_list, container, false);
 
-        mBookRecyclerView =  (RecyclerView) view.findViewById(R.id.book_recycler_view);
+        mBookRecyclerView = (RecyclerView) view.findViewById(R.id.book_recycler_view);
         mBookRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI();
         return view;
 
+    }
+
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 
     private class BookHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -54,8 +65,8 @@ public class BookListFragment extends Fragment{
         private Book mBook;
 
         public BookHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_book, parent,false));
-            mTitleTextView= (TextView) itemView.findViewById(R.id.book_title);
+            super(inflater.inflate(R.layout.list_item_book, parent, false));
+            mTitleTextView = (TextView) itemView.findViewById(R.id.book_title);
             mAuthorTextView = (TextView) itemView.findViewById(R.id.book_author);
             mReadImageView = (ImageView) itemView.findViewById(R.id.book_read);
             itemView.setOnClickListener(this);
@@ -70,7 +81,7 @@ public class BookListFragment extends Fragment{
 
         @Override
         public void onClick(View view) {
-           Intent intent = BookActivity.newIntent(getActivity(), mBook.getId());
+            Intent intent = BookActivity.newIntent(getActivity(), mBook.getId());
             startActivity(intent);
         }
     }
